@@ -1,18 +1,10 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
+import { Role } from '@pulumi/aws/iam';
 
-interface Params {
-  handler: string;
-  functionName: string;
-  sourceFolderPath: string;
-  sourceFileName: string;
-  runtime: string;
-  env: any;
-}
-
-export const initLambda = (params: Params) => {
+export const initLambdaIamRole = (params: { name: string }) => {
   const lambdaHandlerRole = new aws.iam.Role(
-    `lambdaHandlerRole-${params.handler}`,
+    `lambdaHandlerRole-${params.name}`,
     {
       assumeRolePolicy: {
         Version: '2012-10-17',
@@ -30,16 +22,30 @@ export const initLambda = (params: Params) => {
     }
   );
 
-  new aws.iam.RolePolicyAttachment(`lambdaFuncRoleAttach-${params.handler}`, {
+  new aws.iam.RolePolicyAttachment(`lambdaFuncRoleAttach-${params.name}`, {
     role: lambdaHandlerRole,
     policyArn: aws.iam.ManagedPolicies.AWSLambdaExecute,
   });
 
+  return lambdaHandlerRole;
+};
+
+interface Params {
+  handler: string;
+  functionName: string;
+  sourceFolderPath: string;
+  sourceFileName: string;
+  runtime: string;
+  env: any;
+  role: Role;
+}
+
+export const initLambda = (params: Params) => {
   const archive: pulumi.asset.AssetMap = {};
 
   const lambda = new aws.lambda.Function(`lambda-${params.handler}`, {
     name: params.functionName,
-    role: lambdaHandlerRole.arn,
+    role: params.role.arn,
     code: new pulumi.asset.AssetArchive({
       [params.sourceFileName]: new pulumi.asset.FileAsset(
         `${params.sourceFolderPath}${params.sourceFileName}`
@@ -52,5 +58,5 @@ export const initLambda = (params: Params) => {
     },
   });
 
-  return { lambda, lambdaHandlerRole };
+  return lambda;
 };
