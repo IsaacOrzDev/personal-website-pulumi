@@ -1,0 +1,3 @@
+name: personal-website-pulumi-stack
+runtime: nodejs
+description: A minimal TypeScript Pulumi program
