@@ -27,10 +27,10 @@ export const initDataLambda = (params: { bucket: Bucket }) => {
   const lambda = initLambda({
     role: lambdaRole,
     sourceFolderPath: './lambda/',
-    functionName: 'personalData',
-    sourceFileName: 'data.js',
-    handler: 'data.handler',
-    runtime: 'nodejs16.x',
+    functionName: 'personalDataPy',
+    sourceFileName: 'data.py',
+    handler: 'data.lambda_handler',
+    runtime: 'python3.10',
     env: {
       DATA_BUCKET_NAME: params.bucket.id,
       BUCKET_OBJECT_KEY: 'data.json',

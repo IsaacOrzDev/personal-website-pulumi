@@ -35,7 +35,7 @@ interface Params {
   functionName: string;
   sourceFolderPath: string;
   sourceFileName: string;
-  runtime: string;
+  runtime: 'python3.10' | 'nodejs16.x';
   env: any;
   role: Role;
 }
