@@ -1,14 +1,18 @@
 {
-    "name": "personal-website-pulumi-stack",
-    "main": "index.ts",
-    "devDependencies": {
-        "@types/mime": "^3.0.1",
-        "@types/node": "^16"
-    },
-    "dependencies": {
-        "@pulumi/aws": "^5.42.0",
-        "@pulumi/pulumi": "^3.0.0",
-        "dotenv": "^16.3.1",
-        "mime": "^3.0.0"
-    }
+  "name": "personal-website-pulumi-stack",
+  "main": "index.ts",
+  "scripts": {
+    "json": "ts-node ./data.ts"
+  },
+  "devDependencies": {
+    "@types/mime": "^3.0.1",
+    "@types/node": "^16",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "@pulumi/aws": "^5.42.0",
+    "@pulumi/pulumi": "^3.0.0",
+    "dotenv": "^16.3.1",
+    "mime": "^3.0.0"
+  }
 }
