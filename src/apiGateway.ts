@@ -1,6 +1,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
 import { Function } from '@pulumi/aws/lambda';
+import { initCertificate } from './certificate';
 
 interface Params {
   subdomain: string;
@@ -10,12 +11,12 @@ interface Params {
     path?: string;
     httpMethod: string;
     lambda: Function;
-    // invokeArn: pulumi.Output<string>;
   }>;
 }
 
 export const initApiGateway = async (params: Params) => {
   const targetDomain = `${params.subdomain}.${params.domainName}`;
+  const region = 'us-west-1';
 
   let restApi = new aws.apigateway.RestApi('personalApi', {
     name: 'personalApi',
@@ -94,50 +95,15 @@ export const initApiGateway = async (params: Params) => {
     stageName: params.stageName,
   });
 
-  //#region certificate
-
-  const westRegion = new aws.Provider('api-west', {
-    profile: aws.config.profile,
-    region: 'us-west-1',
-  });
-
-  const certificate = new aws.acm.Certificate(
-    'api-certificate',
-    {
-      domainName: targetDomain,
-      validationMethod: 'DNS',
-      subjectAlternativeNames: [],
-    },
-    {
-      provider: westRegion,
-    }
-  );
-
-  const hostedZoneId = aws.route53
+  const hostedZoneId = await aws.route53
     .getZone({ name: params.domainName }, { async: true })
     .then((zone) => zone.zoneId);
 
-  const certificateValidationDomain = new aws.route53.Record(
-    `${targetDomain}Validation`,
-    {
-      name: certificate.domainValidationOptions[0].resourceRecordName,
-      zoneId: hostedZoneId,
-      type: certificate.domainValidationOptions[0].resourceRecordType,
-      records: [certificate.domainValidationOptions[0].resourceRecordValue],
-      ttl: 60 * 10,
-    }
-  );
-
-  const certificateValidation = new aws.acm.CertificateValidation(
-    `${targetDomain}CertificateValidation`,
-    {
-      certificateArn: certificate.arn,
-      validationRecordFqdns: [certificateValidationDomain.fqdn],
-    },
-    { provider: westRegion }
-  );
-
-  //#endregion
+  const certificateValidation = initCertificate({
+    targetDomain,
+    region,
+    hostedZoneId,
+  });
 
   const apiGatewayDomainName = new aws.apigatewayv2.DomainName(
     `${targetDomain}DomainName`,
@@ -170,5 +136,8 @@ export const initApiGateway = async (params: Params) => {
     domainName: apiGatewayDomainName.id,
   });
 
-  return deployment.invokeUrl;
+  return {
+    apiInvokeUrl: deployment.invokeUrl,
+    apiUrl: `https:${targetDomain}`,
+  };
 };
