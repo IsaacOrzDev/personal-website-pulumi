@@ -5,6 +5,7 @@ import { initCertificate } from './certificate';
 interface Params {
   subdomain: string;
   domainName: string;
+  testingImageUrl?: string;
 }
 
 export const initCloudfront = async (params: Params) => {
@@ -39,6 +40,7 @@ export const initCloudfront = async (params: Params) => {
 
       <body>
         <h1>Testing</h1>
+        <img src="${params.testingImageUrl}" />
       </body>
       `,
     },
