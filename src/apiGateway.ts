@@ -138,6 +138,6 @@ export const initApiGateway = async (params: Params) => {
 
   return {
     apiInvokeUrl: deployment.invokeUrl,
-    apiUrl: `https:${targetDomain}`,
+    apiUrl: `https://${targetDomain}`,
   };
 };
