@@ -35,6 +35,7 @@ export const initDataLambda = (params: { bucket: Bucket }) => {
       DATA_BUCKET_NAME: params.bucket.id,
       BUCKET_OBJECT_KEY: 'data.json',
     },
+    layers: [],
   });
 
   return lambda;

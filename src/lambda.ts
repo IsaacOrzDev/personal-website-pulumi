@@ -38,6 +38,7 @@ interface Params {
   runtime: 'python3.10' | 'nodejs16.x';
   env: any;
   role: Role;
+  layers: Array<any>;
 }
 
 export const initLambda = (params: Params) => {
@@ -56,6 +57,7 @@ export const initLambda = (params: Params) => {
     environment: {
       variables: params.env,
     },
+    layers: params.layers,
   });
 
   return lambda;

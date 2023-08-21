@@ -3,7 +3,7 @@ import { initDataLambda } from './src/dataLambda';
 import { initApiGateway } from './src/apiGateway';
 import { initDataBucket } from './src/dataBucket';
 import { initCloudfront } from './src/cloudfront';
-import { initImagesBucket } from './src/imagesBucket';
+import { initImagesBucketAndLambda } from './src/imagesBucketAndLambda';
 import { getValue } from './src/utils';
 
 dotenv.config();
@@ -27,14 +27,16 @@ const run = async () => {
     stageName: 'prod',
   });
 
-  const imagesBucket = await initImagesBucket({ name: 'personalImages' });
+  const imagesBucket = await initImagesBucketAndLambda({
+    name: 'personalImages',
+  });
 
   const distributionResponse = await initCloudfront({
     subdomain: 'personal-v2',
     domainName: process.env.BASE_DOMAIN_NAME!,
     testingImageUrl: `https://${await getValue(
       imagesBucket.bucketDomainName
-    )}/testing.png`,
+    )}/testing_processed.jpg`,
   });
 
   return {
