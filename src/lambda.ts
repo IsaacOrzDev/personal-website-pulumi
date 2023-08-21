@@ -39,6 +39,7 @@ interface Params {
   env: any;
   role: Role;
   layers: Array<any>;
+  timeout?: number;
 }
 
 export const initLambda = (params: Params) => {
@@ -58,6 +59,7 @@ export const initLambda = (params: Params) => {
       variables: params.env,
     },
     layers: params.layers,
+    timeout: params.timeout ?? 5,
   });
 
   return lambda;

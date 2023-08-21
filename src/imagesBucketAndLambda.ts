@@ -70,6 +70,7 @@ export const initImagesBucketAndLambda = async (params: { name: string }) => {
     sourceFileName: 'process_image.py',
     handler: 'process_image.lambda_handler',
     runtime: 'python3.10',
+    timeout: 15,
     env: {},
     layers: [lambdaLayers.Pillow],
   });
@@ -92,21 +93,21 @@ export const initImagesBucketAndLambda = async (params: { name: string }) => {
     }
   );
 
-  // crawlDirectory('./content/images', (filePath: string) => {
-  //   const relativeFilePath = filePath.replace(imagesFolderPath + '/', '');
-  //   const contentFile = new aws.s3.BucketObject(
-  //     `${params.name}-${relativeFilePath}`,
-  //     {
-  //       key: relativeFilePath,
-  //       bucket: imagesBucket,
-  //       contentType: mime.getType(filePath) || undefined,
-  //       source: new pulumi.asset.FileAsset(filePath),
-  //     },
-  //     {
-  //       parent: imagesBucket,
-  //     }
-  //   );
-  // });
+  crawlDirectory('./content/images', (filePath: string) => {
+    const relativeFilePath = filePath.replace(imagesFolderPath + '/', '');
+    const contentFile = new aws.s3.BucketObject(
+      `${params.name}-${relativeFilePath}`,
+      {
+        key: relativeFilePath,
+        bucket: imagesBucket,
+        contentType: mime.getType(filePath) || undefined,
+        source: new pulumi.asset.FileAsset(filePath),
+      },
+      {
+        parent: imagesBucket,
+      }
+    );
+  });
 
   return imagesBucket;
 };

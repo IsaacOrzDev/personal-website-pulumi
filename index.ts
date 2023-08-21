@@ -36,7 +36,7 @@ const run = async () => {
     domainName: process.env.BASE_DOMAIN_NAME!,
     testingImageUrl: `https://${await getValue(
       imagesBucket.bucketDomainName
-    )}/testing_processed.jpg`,
+    )}/testing_thumbnail.jpg`,
   });
 
   return {
