@@ -2,6 +2,7 @@ import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
 import { Function } from '@pulumi/aws/lambda';
 import { initCertificate } from './certificate';
+import { getValue } from './utils';
 
 interface Params {
   subdomain: string;
@@ -61,7 +62,7 @@ export const initApiGateway = async (params: Params) => {
     params.routing.map(
       async (item) =>
         new aws.apigateway.Integration(
-          `apiGatewayIntegration-${item.lambda.invokeArn}`,
+          `apiGatewayIntegration-${await getValue(item.lambda.invokeArn)}`,
           {
             httpMethod: item.httpMethod,
             resourceId: item.path
@@ -80,13 +81,16 @@ export const initApiGateway = async (params: Params) => {
   const permissions = await Promise.all(
     params.routing.map(
       async (item) =>
-        new aws.lambda.Permission(`apiGatewayInvoke-${item.lambda.invokeArn}`, {
-          statementId: 'AllowAPIGatewayInvoke',
-          action: 'lambda:InvokeFunction',
-          function: item.lambda,
-          principal: 'apigateway.amazonaws.com',
-          sourceArn: pulumi.interpolate`${restApi.executionArn}/*/*`,
-        })
+        new aws.lambda.Permission(
+          `apiGatewayInvoke-${await getValue(item.lambda.invokeArn)}`,
+          {
+            statementId: 'AllowAPIGatewayInvoke',
+            action: 'lambda:InvokeFunction',
+            function: item.lambda,
+            principal: 'apigateway.amazonaws.com',
+            sourceArn: pulumi.interpolate`${restApi.executionArn}/*/*`,
+          }
+        )
     )
   );
 

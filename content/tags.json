@@ -1,0 +1,102 @@
+[
+  {
+    "name": "aws",
+    "url": "https://aws.amazon.com/"
+  },
+  {
+    "name": "cloudfront",
+    "url": "https://aws.amazon.com/cloudfront/"
+  },
+  {
+    "name": "s3",
+    "url": "https://aws.amazon.com/s3/"
+  },
+  {
+    "name": "dynamo-db",
+    "url": "https://aws.amazon.com/dynamodb/"
+  },
+  {
+    "name": "lambda",
+    "url": "https://aws.amazon.com/lambda/"
+  },
+  {
+    "name": "api-gateway",
+    "url": "https://aws.amazon.com/api-gateway/"
+  },
+  {
+    "name": "cdk",
+    "url": "https://aws.amazon.com/cdk/"
+  },
+  {
+    "name": "pulumi",
+    "url": "https://www.pulumi.com/"
+  },
+  {
+    "name": "python",
+    "url": "https://www.python.org/"
+  },
+  {
+    "name": "node.js",
+    "url": "https://nodejs.org/en"
+  },
+  {
+    "name": "react.js",
+    "url": "https://react.dev/"
+  },
+  {
+    "name": "gcp",
+    "url": "https://cloud.google.com/"
+  },
+  {
+    "name": "terraform",
+    "url": "https://www.terraform.io/"
+  },
+  {
+    "name": "lang-chain",
+    "url": "https://python.langchain.com/docs/get_started/introduction"
+  },
+  {
+    "name": "vector-db",
+    "url": "https://www.pinecone.io/learn/vector-database/"
+  },
+  {
+    "name": "chroma",
+    "url": "https://www.trychroma.com/"
+  },
+  {
+    "name": "cloud-run",
+    "url": "https://cloud.google.com/run"
+  },
+  {
+    "name": "mongodb",
+    "url": "https://www.mongodb.com/"
+  },
+  {
+    "name": "sap-business-one",
+    "url": "https://www.sap.com/hk/products/erp/business-one.html"
+  },
+  {
+    "name": "web3",
+    "url": "https://www.forbes.com/sites/digital-assets/article/what-is-web3/?sh=cf7400c67a43"
+  },
+  {
+    "name": "defi",
+    "url": "https://www.coinbase.com/learn/crypto-basics/what-is-defi"
+  },
+  {
+    "name": "ethereum",
+    "url": "https://ethereum.org/en/"
+  },
+  {
+    "name": "dao",
+    "url": "https://ethereum.org/en/dao/"
+  },
+  {
+    "name": "attribute-based-access-control",
+    "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html"
+  },
+  {
+    "name": "typescript",
+    "url": "https://www.typescriptlang.org/"
+  }
+]

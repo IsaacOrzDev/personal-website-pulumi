@@ -2,7 +2,9 @@
   "name": "personal-website-pulumi-stack",
   "main": "index.ts",
   "scripts": {
-    "json": "ts-node ./data.ts"
+    "json": "ts-node ./data.ts",
+    "up": "pulumi up",
+    "up:data": "npm run json && npm run up"
   },
   "devDependencies": {
     "@types/mime": "^3.0.1",

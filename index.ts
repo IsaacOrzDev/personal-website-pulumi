@@ -5,6 +5,9 @@ import { initDataBucket } from './src/dataBucket';
 import { initCloudfront } from './src/cloudfront';
 import { initImagesBucketAndLambda } from './src/imagesBucketAndLambda';
 import { getValue } from './src/utils';
+import { initTabTable } from './src/tagTable';
+import tags from './content/tags.json';
+import { initTagLambda } from './src/tabLambda';
 
 dotenv.config();
 
@@ -15,6 +18,10 @@ const run = async () => {
 
   const dataLambda = await initDataLambda({ bucket: dataBucket });
 
+  const tagDynamoDBTable = await initTabTable(tags);
+
+  const tagLambda = await initTagLambda({ table: tagDynamoDBTable });
+
   const apiResponse = await initApiGateway({
     subdomain: 'api-personal',
     domainName: process.env.BASE_DOMAIN_NAME!,
@@ -22,6 +29,11 @@ const run = async () => {
       {
         httpMethod: 'GET',
         lambda: dataLambda,
+      },
+      {
+        httpMethod: 'GET',
+        path: 'tags',
+        lambda: tagLambda,
       },
     ],
     stageName: 'prod',
@@ -36,7 +48,7 @@ const run = async () => {
     domainName: process.env.BASE_DOMAIN_NAME!,
     testingImageUrl: `https://${await getValue(
       imagesBucket.bucketDomainName
-    )}/testing_thumbnail.jpg`,
+    )}/testing_thumbnail.png`,
   });
 
   return {
