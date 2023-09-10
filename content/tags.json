@@ -130,5 +130,9 @@
   {
     "name": "llms",
     "url": "https://www.nvidia.com/en-us/glossary/data-science/large-language-models/"
+  },
+  {
+    "name": "ci/cd",
+    "url": "https://about.gitlab.com/topics/ci-cd/"
   }
 ]

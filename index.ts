@@ -8,6 +8,7 @@ import { initTabTable } from './src/tagTable';
 import tags from './content/tags.json';
 import { initTagLambda } from './src/tabLambda';
 import * as aws from '@pulumi/aws';
+import { initCicdUser } from './src/cicdUser';
 
 dotenv.config();
 
@@ -64,10 +65,18 @@ const run = async () => {
     isWebsite: true,
   });
 
+  const cicdUser = initCicdUser({
+    domainName: process.env.BASE_DOMAIN_NAME!,
+  });
+
   return {
     ...apiResponse,
     images: imagesDistributionResponse,
     frontend: frontendDistributionResponse,
+    cicdUser: {
+      name: cicdUser.name,
+      arn: cicdUser.arn,
+    },
   };
 };
 
