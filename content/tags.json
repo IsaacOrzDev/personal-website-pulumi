@@ -8,6 +8,14 @@
     "url": "https://aws.amazon.com/cloudfront/"
   },
   {
+    "name": "route53",
+    "url": "https://aws.amazon.com/route53/"
+  },
+  {
+    "name": "acm",
+    "url": "https://aws.amazon.com/certificate-manager/"
+  },
+  {
     "name": "s3",
     "url": "https://aws.amazon.com/s3/"
   },
@@ -98,5 +106,29 @@
   {
     "name": "typescript",
     "url": "https://www.typescriptlang.org/"
+  },
+  {
+    "name": "ocr",
+    "url": "https://aws.amazon.com/what-is/ocr/?nc1=h_ls"
+  },
+  {
+    "name": "document-ai",
+    "url": "https://cloud.google.com/document-ai"
+  },
+  {
+    "name": "seo-friendly",
+    "url": "https://linchpinseo.com/how-to-design-an-seo-friendly-website/"
+  },
+  {
+    "name": "openai",
+    "url": "https://platform.openai.com/docs/introduction/overview"
+  },
+  {
+    "name": "cohere",
+    "url": "https://cohere.com/"
+  },
+  {
+    "name": "llms",
+    "url": "https://www.nvidia.com/en-us/glossary/data-science/large-language-models/"
   }
 ]

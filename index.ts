@@ -4,10 +4,10 @@ import { initApiGateway } from './src/apiGateway';
 import { initDataBucket } from './src/dataBucket';
 import { initCloudfront } from './src/cloudfront';
 import { initImagesBucketAndLambda } from './src/imagesBucketAndLambda';
-import { getValue } from './src/utils';
 import { initTabTable } from './src/tagTable';
 import tags from './content/tags.json';
 import { initTagLambda } from './src/tabLambda';
+import * as aws from '@pulumi/aws';
 
 dotenv.config();
 
@@ -40,21 +40,34 @@ const run = async () => {
   });
 
   const imagesBucket = await initImagesBucketAndLambda({
-    name: 'personalImages',
+    name: `personal-images.${process.env.BASE_DOMAIN_NAME}`,
   });
 
-  const distributionResponse = await initCloudfront({
-    subdomain: 'personal-v2',
+  const imagesDistributionResponse = await initCloudfront({
+    subdomain: 'personal-images',
     domainName: process.env.BASE_DOMAIN_NAME!,
-    testingImageUrl: `https://${await getValue(
-      imagesBucket.bucketDomainName
-    )}/testing_thumbnail.png`,
+    bucket: imagesBucket,
+  });
+
+  const frontendBucket = new aws.s3.Bucket('frontendBucket', {
+    bucket: `personal-dev.${process.env.BASE_DOMAIN_NAME}`,
+    forceDestroy: true,
+    website: {
+      indexDocument: 'index.html',
+    },
+  });
+
+  const frontendDistributionResponse = await initCloudfront({
+    subdomain: 'personal-dev',
+    domainName: process.env.BASE_DOMAIN_NAME!,
+    bucket: frontendBucket,
+    isWebsite: true,
   });
 
   return {
     ...apiResponse,
-    ...distributionResponse,
-    imagesBucketUrl: imagesBucket.bucketDomainName,
+    images: imagesDistributionResponse,
+    frontend: frontendDistributionResponse,
   };
 };
 

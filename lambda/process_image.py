@@ -41,7 +41,7 @@ def lambda_handler(event, context):
             new_image_data.seek(0)
             
             # Upload the new image to S3 with the new file name
-            s3_client.upload_fileobj(new_image_data, bucket_name, new_object_key, ExtraArgs={'ContentType': 'image/jpeg'})
+            s3_client.upload_fileobj(new_image_data, bucket_name, new_object_key, ExtraArgs={'ContentType': 'image/png'})
             print("success")
         
         except Exception as e:

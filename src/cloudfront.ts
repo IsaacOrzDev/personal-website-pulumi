@@ -1,11 +1,13 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as aws from '@pulumi/aws';
 import { initCertificate } from './certificate';
+import { Bucket } from '@pulumi/aws/s3';
 
 interface Params {
   subdomain: string;
   domainName: string;
-  testingImageUrl?: string;
+  isWebsite?: boolean;
+  bucket: Bucket;
 }
 
 export const initCloudfront = async (params: Params) => {
@@ -13,22 +15,14 @@ export const initCloudfront = async (params: Params) => {
   const targetDomain = `${params.subdomain}.${params.domainName}`;
   const region = 'us-east-1';
 
-  const contentBucket = new aws.s3.Bucket('distributionContentBucket', {
-    bucket: targetDomain,
-    forceDestroy: true,
-    // Configure S3 to serve bucket contents as a website. This way S3 will automatically convert
-    website: {
-      indexDocument: 'index.html',
-    },
-  });
-
-  const contentFile = new aws.s3.BucketObject(
-    'distributionIndexFile',
-    {
-      key: 'index.html',
-      bucket: contentBucket,
-      contentType: '.html',
-      content: `
+  if (params.isWebsite) {
+    const contentFile = new aws.s3.BucketObject(
+      `${targetDomain}-distributionIndexFile`,
+      {
+        key: 'index.html',
+        bucket: params.bucket,
+        contentType: '.html',
+        content: `
       <!doctype html>
       <html>
 
@@ -40,14 +34,14 @@ export const initCloudfront = async (params: Params) => {
 
       <body>
         <h1>Testing</h1>
-        <img src="${params.testingImageUrl}" />
       </body>
       `,
-    },
-    {
-      parent: contentBucket,
-    }
-  );
+      },
+      {
+        parent: params.bucket,
+      }
+    );
+  }
 
   const hostedZoneId = await aws.route53
     .getZone({ name: params.domainName }, { async: true })
@@ -60,45 +54,48 @@ export const initCloudfront = async (params: Params) => {
   });
 
   const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
-    'distributionOriginAccessIdentity',
+    `${targetDomain}-distributionOriginAccessIdentity`,
     {
       comment: 'this is needed to setup s3 polices and make s3 not public.',
     }
   );
 
-  const bucketPolicy = new aws.s3.BucketPolicy('distributionBucketPolicy', {
-    bucket: contentBucket.id, // refer to the bucket created earlier
-    policy: pulumi.jsonStringify({
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Effect: 'Allow',
-          Principal: {
-            AWS: originAccessIdentity.iamArn,
-          }, // Only allow Cloudfront read access.
-          Action: ['s3:GetObject'],
-          Resource: [pulumi.interpolate`${contentBucket.arn}/*`], // Give Cloudfront access to the entire bucket.
-        },
-      ],
-    }),
-  });
+  const bucketPolicy = new aws.s3.BucketPolicy(
+    `${targetDomain}-distributionBucketPolicy`,
+    {
+      bucket: params.bucket.id, // refer to the bucket created earlier
+      policy: pulumi.jsonStringify({
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Effect: 'Allow',
+            Principal: {
+              AWS: originAccessIdentity.iamArn,
+            }, // Only allow Cloudfront read access.
+            Action: ['s3:GetObject'],
+            Resource: [pulumi.interpolate`${params.bucket.arn}/*`], // Give Cloudfront access to the entire bucket.
+          },
+        ],
+      }),
+    }
+  );
 
   const distributionArgs: aws.cloudfront.DistributionArgs = {
     enabled: true,
     aliases: [targetDomain],
     origins: [
       {
-        originId: contentBucket.arn,
-        domainName: contentBucket.bucketRegionalDomainName,
+        originId: params.bucket.arn,
+        domainName: params.bucket.bucketRegionalDomainName,
         s3OriginConfig: {
           originAccessIdentity:
             originAccessIdentity.cloudfrontAccessIdentityPath,
         },
       },
     ],
-    defaultRootObject: 'index.html',
+    defaultRootObject: params.isWebsite ? 'index.html' : undefined,
     defaultCacheBehavior: {
-      targetOriginId: contentBucket.arn,
+      targetOriginId: params.bucket.arn,
 
       viewerProtocolPolicy: 'redirect-to-https',
       allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
@@ -124,7 +121,7 @@ export const initCloudfront = async (params: Params) => {
   };
 
   const distribution = new aws.cloudfront.Distribution(
-    'Distribution',
+    `${targetDomain}-Distribution`,
     distributionArgs
   );
 
@@ -145,6 +142,6 @@ export const initCloudfront = async (params: Params) => {
     distributionUrl: `https://${targetDomain}`,
     distributionDomainName: distribution.domainName,
     distributionId: distribution.id,
-    distributionBucket: contentBucket.id,
+    distributionBucket: params.bucket.id,
   };
 };

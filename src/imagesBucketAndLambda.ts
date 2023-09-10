@@ -9,31 +9,32 @@ export const initImagesBucketAndLambda = async (params: { name: string }) => {
   const imagesFolderPath = './content/images';
 
   const imagesBucket = new aws.s3.Bucket(params.name, {
+    bucket: params.name,
     forceDestroy: true,
   });
 
-  const bucketAccessBlock = new aws.s3.BucketPublicAccessBlock(
-    `${params.name}AccessBlock`,
-    {
-      bucket: imagesBucket.id,
-      blockPublicPolicy: false,
-    }
-  );
+  // const bucketAccessBlock = new aws.s3.BucketPublicAccessBlock(
+  //   `${params.name}AccessBlock`,
+  //   {
+  //     bucket: imagesBucket.id,
+  //     blockPublicPolicy: false,
+  //   }
+  // );
 
-  const bucketPolicy = new aws.s3.BucketPolicy(`${params.name}BucketPolicy`, {
-    bucket: imagesBucket.id,
-    policy: pulumi.jsonStringify({
-      Version: '2012-10-17',
-      Statement: [
-        {
-          Effect: 'Allow',
-          Principal: '*',
-          Action: ['s3:GetObject'],
-          Resource: [pulumi.interpolate`${imagesBucket.arn}/*`],
-        },
-      ],
-    }),
-  });
+  // const bucketPolicy = new aws.s3.BucketPolicy(`${params.name}BucketPolicy`, {
+  //   bucket: imagesBucket.id,
+  //   policy: pulumi.jsonStringify({
+  //     Version: '2012-10-17',
+  //     Statement: [
+  //       {
+  //         Effect: 'Allow',
+  //         Principal: '*',
+  //         Action: ['s3:GetObject'],
+  //         Resource: [pulumi.interpolate`${imagesBucket.arn}/*`],
+  //       },
+  //     ],
+  //   }),
+  // });
 
   const lambdaRole = initLambdaIamRole({ name: 'processImageLambda' });
 
