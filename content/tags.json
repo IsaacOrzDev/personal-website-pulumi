@@ -158,5 +158,13 @@
   {
     "name": "ses",
     "url": "https://aws.amazon.com/ses/"
+  },
+  {
+    "name": "serverless",
+    "url": "https://www.redhat.com/en/topics/cloud-native-apps/what-is-serverless"
+  },
+  {
+    "name": "iac",
+    "url": "https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac"
   }
 ]
