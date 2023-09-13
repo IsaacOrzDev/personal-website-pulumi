@@ -100,6 +100,10 @@
     "url": "https://ethereum.org/en/dao/"
   },
   {
+    "name": "private-market",
+    "url": "https://www.moonfare.com/glossary/private-markets"
+  },
+  {
     "name": "attribute-based-access-control",
     "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html"
   },
@@ -134,5 +138,25 @@
   {
     "name": "ci/cd",
     "url": "https://about.gitlab.com/topics/ci-cd/"
+  },
+  {
+    "name": "next.js",
+    "url": "https://nextjs.org/"
+  },
+  {
+    "name": "tailwind-css",
+    "url": "https://tailwindcss.com/"
+  },
+  {
+    "name": "sns",
+    "url": "https://aws.amazon.com/sns/"
+  },
+  {
+    "name": "sqs",
+    "url": "https://aws.amazon.com/sqs/"
+  },
+  {
+    "name": "ses",
+    "url": "https://aws.amazon.com/ses/"
   }
 ]

@@ -65,6 +65,24 @@ const run = async () => {
     isWebsite: true,
   });
 
+  const frontendProductionBucket = new aws.s3.Bucket(
+    'frontendProductionBucket',
+    {
+      bucket: `personal.${process.env.BASE_DOMAIN_NAME}`,
+      forceDestroy: true,
+      website: {
+        indexDocument: 'index.html',
+      },
+    }
+  );
+
+  const frontendProductionDistributionResponse = await initCloudfront({
+    subdomain: 'personal',
+    domainName: process.env.BASE_DOMAIN_NAME!,
+    bucket: frontendProductionBucket,
+    isWebsite: true,
+  });
+
   const cicdUser = initCicdUser({
     domainName: process.env.BASE_DOMAIN_NAME!,
   });
@@ -73,6 +91,7 @@ const run = async () => {
     ...apiResponse,
     images: imagesDistributionResponse,
     frontend: frontendDistributionResponse,
+    frontendProduction: frontendProductionDistributionResponse,
     cicdUser: {
       name: cicdUser.name,
       arn: cicdUser.arn,
