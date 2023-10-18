@@ -148,6 +148,10 @@
     "url": "https://tailwindcss.com/"
   },
   {
+    "name": "iam",
+    "url": "https://aws.amazon.com/iam/"
+  },
+  {
     "name": "sns",
     "url": "https://aws.amazon.com/sns/"
   },
@@ -160,11 +164,87 @@
     "url": "https://aws.amazon.com/ses/"
   },
   {
+    "name": "eks",
+    "url": "https://aws.amazon.com/eks/"
+  },
+  {
+    "name": "ecs",
+    "url": "https://aws.amazon.com/ecs/"
+  },
+  {
+    "name": "ecr",
+    "url": "https://aws.amazon.com/ecr/"
+  },
+  {
+    "name": "fargate",
+    "url": "https://aws.amazon.com/fargate/"
+  },
+  {
+    "name": "alb",
+    "url": "https://aws.amazon.com/alb/"
+  },
+  {
     "name": "serverless",
     "url": "https://www.redhat.com/en/topics/cloud-native-apps/what-is-serverless"
   },
   {
     "name": "iac",
     "url": "https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac"
+  },
+  {
+    "name": "vite",
+    "url": "https://vitejs.dev/"
+  },
+  {
+    "name": "github-actions",
+    "url": "https://github.com/features/actions"
+  },
+  {
+    "name": "vercel",
+    "url": "https://vercel.com/"
+  },
+  {
+    "name": "cloud-watch",
+    "url": "https://aws.amazon.com/cloudwatch/"
+  },
+  {
+    "name": "kubnernetes",
+    "url": "https://kubernetes.io/"
+  },
+  {
+    "name": "micro-services",
+    "url": "https://aws.amazon.com/microservices/"
+  },
+  {
+    "name": "grpc",
+    "url": "https://grpc.io/"
+  },
+  {
+    "name": "nest.js",
+    "url": "https://nestjs.com/"
+  },
+  {
+    "name": "go-lang",
+    "url": "https://go.dev/"
+  },
+  {
+    "name": "c#",
+    "url": "https://dotnet.microsoft.com/en-us/languages/csharp"
+  },
+  {
+    "name": ".net-core",
+    "url": "https://dotnet.microsoft.com/"
+  },
+  {
+    "name": "swagger",
+    "url": "https://swagger.io/"
+  },
+  {
+    "name": "postgresql",
+    "url": "https://www.postgresql.org/"
+  },
+  {
+    "name": "stable-diffusion",
+    "url": "https://stability.ai/stable-diffusion"
   }
 ]
